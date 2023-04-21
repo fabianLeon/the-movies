@@ -74,7 +74,6 @@ movies_df.head()
 movies_df.isnull().sum()
 
 movies_df['keywords'].fillna('[]', inplace=True)
-
 movies_df['genre'] = movies_df['genre'].apply(lambda x: ' '.join(x))
 
 movies_df.head()
