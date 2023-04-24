@@ -28,20 +28,16 @@ movies_md.head()
 movies_md.columns
 
 movies_md = movies_md[['id', 'original_title', 'overview', 'genres']]
-
 movies_md.head()
 
 movies_md['title'] = movies_md['original_title']
-
 movies_md.head()
 
 
 movies_md.reset_index(inplace=True, drop=True)
-
 movies_md.head()
 
 movies_credits = movies_credits[['id', 'cast']]
-
 movies_credits.head()
 
 len(movies_md)
@@ -52,27 +48,32 @@ len(movies_md)
 
 movies_md['id'] = movies_md['id'].astype(int)
 
+#Combina peliculas con keywords usando id
 movies_df = pd.merge(movies_md, movies_keywords, on='id', how='left')
 
 movies_df.head()
 
+#reIndexar
 movies_df.reset_index(inplace=True, drop=True)
 
+#Combina merge (peliculas con keywords) con credits usando id
 movies_df = pd.merge(movies_df, movies_credits, on='id', how='left')
+
+#reIndexar
 movies_df.reset_index(inplace=True, drop=True)
-
 movies_df.head()
 
+#en columna genre se almacena genres -> géneros [Action, Adventure, Fantasy] 
 movies_df['genre'] = movies_df['genres'].apply(lambda x: [i['name'] for i in eval(x)])
-
 movies_df.head()
 
+#en columna genre el resultado anterior removiendo espacios en blanco 
 movies_df['genre'] = movies_df['genre'].apply(lambda x: [i.replace(" ", "") for i in x])
 
 movies_df.head()
-
 movies_df.isnull().sum()
 
+#llena con el string '[]' los valores NaN
 movies_df['keywords'].fillna('[]', inplace=True)
 movies_df['genre'] = movies_df['genre'].apply(lambda x: ' '.join(x))
 
@@ -110,8 +111,10 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 # Unique Words have high IDF
 tfidf = TfidfVectorizer(max_features=5000)
 
+# Crea una matriz de frecuencia de términos TF-IDF (frecuencia de término - inversa de la frecuencia de documento),
 vectorized_data = tfidf.fit_transform(movies_df['tags'].values)
 
+# Creación de términos
 tfidf.get_feature_names_out()
 
 vectorized_dataframe = pd.DataFrame(vectorized_data.toarray(), index=movies_df['tags'].index.tolist())
