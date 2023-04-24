@@ -39,9 +39,13 @@ def hello_world(token):
             else:
                 user[token].append(objChk)
 
+
+        sorted_objects = sorted(user[token], key=lambda obj: obj['count'])
+        string_result = " ".join(str(obj['tag']) for obj in sorted_objects)
+
         distances = similarity_matrix[862]
         movie_list = sorted(list(enumerate(distances)),
-                            reverse=True, key=lambda x: x[1])[1:5]
+                            reverse=True, key=lambda x: x[1])[1:15]
     else:
         distances = similarity_matrix[862]
         movie_list = sorted(list(enumerate(distances)),
