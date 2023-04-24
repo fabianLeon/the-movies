@@ -11,7 +11,7 @@ user = {"a": [],
         "c": []}
 
 
-tags = pd.read_csv("keywords.csv" )
+tags = pd.read_csv("keywords.csv")
 movies_df = pd.read_csv("movies_all_data.csv")
 
 app = Flask(__name__)
@@ -21,22 +21,28 @@ CORS(app)
 @app.route('/<token>')
 def hello_world(token):
     ini = 1
-    end = 5 
-    movie_data = [] 
-    if 'token' in request.view_args  :
-        tagsMovie =json.loads(tags[tags['id'] == 862]["keywords"][0].replace("'", "\""))  
-        for item in tagsMovie :
-            if  len(user[token])>0:
-                for savetags in user[token]:
-                    if  item['name']  == savetags["tag"]:   
-                        savetags["count"]+=1 
-                        break 
+    end = 5
+    movie_data = []
+    if 'token' in request.view_args:
+        tagsMovie = json.loads(
+            tags[tags['id'] == 862]["keywords"][0].replace("'", "\""))
+        for item in tagsMovie:
+            objChk = user[token].append({"count": 0, "tag": item['name']})
+            if len(user[token]) > 0:
+
+                index = next((i for i, obj in enumerate(
+                    user[token]) if objChk['tag'] == obj['tag']), None)
+
+                if index is not None:
+                    user[token][index]["count"] += 1
+                else:
+                    user[token].append(objChk)
             else:
-                user[token].append({"count":0,"tag":item['name']}) 
-        
+                user[token].append(objChk)
+
         distances = similarity_matrix[862]
         movie_list = sorted(list(enumerate(distances)),
-                reverse=True, key=lambda x: x[1])[1:5]
+                            reverse=True, key=lambda x: x[1])[1:5]
     else:
         distances = similarity_matrix[862]
         movie_list = sorted(list(enumerate(distances)),
