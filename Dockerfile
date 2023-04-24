@@ -21,4 +21,4 @@ RUN python model.py
 
 COPY . .
 
-CMD [ "python", "app.py" ]
+CMD ["python3", "-m", "flask", "run", "--host=0.0.0.0"]
