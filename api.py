@@ -27,11 +27,10 @@ def hello_world(token):
         tagsMovie = json.loads(
             tags[tags['id'] == 862]["keywords"][0].replace("'", "\""))
         for item in tagsMovie:
-            objChk = user[token].append({"count": 0, "tag": item['name']})
+            objChk = {"count": 0, "tag": item['name']}
             if len(user[token]) > 0:
-
                 index = next((i for i, obj in enumerate(
-                    user[token]) if objChk['tag'] == obj['tag']), None)
+                    user[token]) if item['name'] == obj['tag']), None)
 
                 if index is not None:
                     user[token][index]["count"] += 1
