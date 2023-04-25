@@ -17,4 +17,4 @@ def generate_embeding(data):
 
 def get_similitary(query):
     result =client.query .get("Movie",["idMovie","title"]).with_near_vector({"vector": generate_embeding(query)}).with_limit(15).do()
-    return result
+    return result["data"]["Get"]["Movie"]

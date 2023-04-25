@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request
-from flask_cors import CORS
+#from flask_cors import CORS
 import numpy as np
 import pandas as pd
 import json
@@ -14,20 +14,19 @@ tags = pd.read_csv("keywords.csv")
 movies_df = pd.read_csv("movies_all_data.csv")
 
 app = Flask(__name__)
-CORS(app)
+#CORS(app)
 
 
 @app.route('/<token>')
 def hello_world(token):
-    ini = 1
-    end = 5
     movie_data = []
     if 'token' in request.view_args:
         if token not in user.keys():
             user[token] = []
-
         tagsMovie = json.loads(
-            tags[tags['id'] == 862]["keywords"][0].replace("'", "\""))
+            tags[tags['id'] == 862]["keywords"]._values[0].replace("'", "\"")
+            #tags[tags['id'] == 9571]["keywords"]._values[0].replace("'", "\"")
+            )
         for item in tagsMovie:
             objChk = {"count": 0, "tag": item['name']}
             if len(user[token]) > 0:
@@ -49,10 +48,9 @@ def hello_world(token):
         movie_list = sorted(list(enumerate(movies_df)),
                             reverse=True, key=lambda x: x[1])[1:15]
 
-    for movie_id in movie_list:
-        data = movies_df.iloc[movie_id[0]]
+    for data in movie_list:
         movie_data.append(
-            {"id": int(data["id"]), "title": data["title"]})
+            {"id": int(data["idMovie"]), "title": data["title"]})
 
     return jsonify(movie_data)
 
