@@ -60,10 +60,11 @@ async def main():
                 "tags": article["tags"]
             }
 
-            batch.add_data_object(properties, "Movie",   vector=article["vector"])
+            batch.add_data_object(properties, "Movie",
+                                  vector=article["vector"])
             counter = counter+1
 
     print("worker!!!")
 
 
-main()
+asyncio.run(main())
