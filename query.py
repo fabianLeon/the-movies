@@ -15,5 +15,6 @@ def generate_embeding(data):
         input=[data], engine="embedding-eagle-dev")
     return result.data[0].embedding
 
-result =client.query .get("Movie",["idMovie","title"]).with_near_vector({"vector": generate_embeding("commedy")}).with_limit(15).do()
-print(result)
+def get_similitary(query):
+    result =client.query .get("Movie",["idMovie","title"]).with_near_vector({"vector": generate_embeding(query)}).with_limit(15).do()
+    return result

@@ -3,6 +3,7 @@ from flask_cors import CORS
 import numpy as np
 import pandas as pd
 import json
+from query import get_similitary
 from tokenGenerator import tokenApi
 similarity_matrix = np.loadtxt("similarity_matrix.csv", delimiter=",")
 
@@ -43,18 +44,15 @@ def hello_world(token):
         sorted_objects = sorted(user[token], key=lambda obj: obj['count'])
         string_result = " ".join(str(obj['tag']) for obj in sorted_objects)
 
-        distances = similarity_matrix[862]
-        movie_list = sorted(list(enumerate(distances)),
-                            reverse=True, key=lambda x: x[1])[1:15]
+        movie_list = get_similitary(string_result)
     else:
-        distances = similarity_matrix[862]
-        movie_list = sorted(list(enumerate(distances)),
+        movie_list = sorted(list(enumerate(movies_df)),
                             reverse=True, key=lambda x: x[1])[1:15]
 
     for movie_id in movie_list:
         data = movies_df.iloc[movie_id[0]]
         movie_data.append(
-            {"id": int(data["id"]), "title": data["title"], "tags": data["tags"]})
+            {"id": int(data["id"]), "title": data["title"]})
 
     return jsonify(movie_data)
 
