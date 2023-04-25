@@ -6,9 +6,7 @@ import json
 from tokenGenerator import tokenApi
 similarity_matrix = np.loadtxt("similarity_matrix.csv", delimiter=",")
 
-user = {"a": [],
-        "b": [],
-        "c": []}
+user = {}
 
 
 tags = pd.read_csv("keywords.csv")
@@ -24,6 +22,9 @@ def hello_world(token):
     end = 5
     movie_data = []
     if 'token' in request.view_args:
+        if token not in user.keys():
+            user[token] = []
+
         tagsMovie = json.loads(
             tags[tags['id'] == 862]["keywords"][0].replace("'", "\""))
         for item in tagsMovie:
@@ -38,7 +39,6 @@ def hello_world(token):
                     user[token].append(objChk)
             else:
                 user[token].append(objChk)
-
 
         sorted_objects = sorted(user[token], key=lambda obj: obj['count'])
         string_result = " ".join(str(obj['tag']) for obj in sorted_objects)

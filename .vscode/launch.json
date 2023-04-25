@@ -10,7 +10,8 @@
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
-            "justMyCode": true
+            "justMyCode": true,
+            "env": { "OPENAI_API_KEY":"d97da19393d241cd9d00b5709d489481"}
         }
     ]
 }

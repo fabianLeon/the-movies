@@ -7,11 +7,14 @@ import plotly.express as px
 import plotly.graph_objects as go
 from tqdm import tqdm
 import warnings
+from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.decomposition import TruncatedSVD
+from sklearn.feature_extraction.text import TfidfVectorizer
 
 plt.style.use("fivethirtyeight")
 warnings.filterwarnings("ignore")
 
-# loading datasets 
+# loading datasets
 
 movies_md = pd.read_csv("movies_metadata.csv")
 movies_keywords = pd.read_csv("keywords.csv")
@@ -63,11 +66,13 @@ movies_df.reset_index(inplace=True, drop=True)
 
 movies_df.head()
 
-movies_df['genre'] = movies_df['genres'].apply(lambda x: [i['name'] for i in eval(x)])
+movies_df['genre'] = movies_df['genres'].apply(
+    lambda x: [i['name'] for i in eval(x)])
 
 movies_df.head()
 
-movies_df['genre'] = movies_df['genre'].apply(lambda x: [i.replace(" ", "") for i in x])
+movies_df['genre'] = movies_df['genre'].apply(
+    lambda x: [i.replace(" ", "") for i in x])
 
 movies_df.head()
 
@@ -81,17 +86,23 @@ movies_df.head()
 movies_df.drop('genres', axis=1, inplace=True)
 movies_df.head()
 
-movies_df['cast'] = movies_df['cast'].apply(lambda x: [i['name'] for i in eval(x)])
-movies_df['cast'] = movies_df['cast'].apply(lambda x: ' '.join([i.replace(" ", "") for i in x]))
+movies_df['cast'] = movies_df['cast'].apply(
+    lambda x: [i['name'] for i in eval(x)])
+movies_df['cast'] = movies_df['cast'].apply(
+    lambda x: ' '.join([i.replace(" ", "") for i in x]))
 
-movies_df['keywords'] = movies_df['keywords'].apply(lambda x: [i['name'] for i in eval(x)])
-movies_df['keywords'] = movies_df['keywords'].apply(lambda x: ' '.join([i.replace(" ", "") for i in x]))
+movies_df['keywords'] = movies_df['keywords'].apply(
+    lambda x: [i['name'] for i in eval(x)])
+movies_df['keywords'] = movies_df['keywords'].apply(
+    lambda x: ' '.join([i.replace(" ", "") for i in x]))
 
 movies_df.head()
-movies_df['tags'] = movies_df['overview']+' '+movies_df['keywords']+' '+movies_df['cast']+' '+movies_df['genre']+' '+movies_df['original_title']
+movies_df['tags'] = movies_df['overview']+' '+movies_df['keywords']+' ' + \
+    movies_df['cast']+' '+movies_df['genre']+' '+movies_df['original_title']
 movies_df['tags']
 
-movies_df.drop(['genre', 'original_title', 'keywords', 'cast', 'overview'], axis=1, inplace=True)
+movies_df.drop(['genre', 'original_title', 'keywords',
+               'cast', 'overview'], axis=1, inplace=True)
 
 movies_df.head()
 movies_df.isnull().sum()
@@ -104,7 +115,6 @@ movies_df.shape
 
 movies_df.to_csv("movies_all_data.csv", index=False)
 
-from sklearn.feature_extraction.text import TfidfVectorizer
 
 # Common words have less IDF
 # Unique Words have high IDF
@@ -114,13 +124,13 @@ vectorized_data = tfidf.fit_transform(movies_df['tags'].values)
 
 tfidf.get_feature_names_out()
 
-vectorized_dataframe = pd.DataFrame(vectorized_data.toarray(), index=movies_df['tags'].index.tolist())
+vectorized_dataframe = pd.DataFrame(
+    vectorized_data.toarray(), index=movies_df['tags'].index.tolist())
 
 vectorized_dataframe.head()
 
 vectorized_dataframe.shape
 
-from sklearn.decomposition import TruncatedSVD
 
 svd = TruncatedSVD(n_components=3000)
 
@@ -132,7 +142,6 @@ reduced_data
 
 svd.explained_variance_ratio_.cumsum()
 
-from sklearn.metrics.pairwise import cosine_similarity
 
 similarity = cosine_similarity(reduced_data)
 
@@ -142,4 +151,3 @@ np.savetxt("similarity_matrix.csv", similarity, delimiter=",")
 
 # with open('similarity_model.pkl', 'wb') as f:
 #     pickle.dump(similarity, f)
-
