@@ -1,34 +1,22 @@
-import weaviate
 import openai
 import pandas as pd
-import numpy as np
 import asyncio
+import weaviate
+client = weaviate.Client(url="https://moviexpredeitor-77pe0djc.weaviate.network")
 
 openai.api_type = "azure"
 openai.api_base = "https://aisksamidev.openai.azure.com/"
 openai.api_version = "2023-03-15-preview"
 
-client = weaviate.Client(
-    url="https://moviexpredeitor-77pe0djc.weaviate.network"
-)
-
-
-class_obj = {
-    "class": "Movie",
-    "vectorizer": "none"  # Or "text2vec-cohere" or "text2vec-huggingface"
-}
-client.schema.delete_all()
-client.schema.create_class(
-    class_obj
-)
 
 movies_data = pd.read_csv("movies_all_data.csv")
-movies_data.columns = ["id", "title", "tags","vector"]
+movies_data.columns = ["id", "title", "tags", "vector"]
 
 
 async def generate_embeding(i):
     result = await openai.Embedding.acreate(
-        input=[movies_data.at[i, "tags"]], engine="embedding-eagle-dev")
+        input=[movies_data.at[i, "tags"]], engine="embedding-eagle-dev"
+    )
     movies_data.at[i, "vector"] = result.data[0].embedding
     return result.data[0].embedding
 
@@ -41,7 +29,7 @@ async def main():
     max_query = 50
     delay_per_request = 15  # there is a 50/10sec rate limit in openai azure models
     for i in range(0, len(tasks), max_query):
-        result = await asyncio.gather(*tasks[i:i+max_query])
+        result = await asyncio.gather(*tasks[i : i + max_query])
         embeddings_response.extend(result)
         print(f"voy en la linea {i} ")
         await asyncio.sleep(delay_per_request)
@@ -50,18 +38,17 @@ async def main():
     client.batch.configure(batch_size=49, creation_time=12)
     with client.batch as batch:
         for i, article in movies_data.iterrows():
-            if (counter % 10 == 0):
+            if counter % 10 == 0:
                 print(f"Import {counter} / {len(movies_data )} ")
 
             properties = {
                 "title": article["title"],
                 "idMovie": article["id"],
-                "tags": article["tags"]
+                "tags": article["tags"],
             }
 
-            batch.add_data_object(properties, "Movie",
-                                  vector=article["vector"])
-            counter = counter+1
+            batch.add_data_object(properties, "Movie", vector=article["vector"])
+            counter = counter + 1
 
     print("worker!!!")
 

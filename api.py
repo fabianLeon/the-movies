@@ -1,11 +1,11 @@
 from flask import Flask, jsonify, request
-#from flask_cors import CORS
+import flask_cors as CORS
 import numpy as np
 import pandas as pd
 import json
 from query import get_similitary
 from tokenGenerator import tokenApi
-similarity_matrix = np.loadtxt("similarity_matrix.csv", delimiter=",")
+similarity_matrix = np.loadtxt("Movies_old/similarity_matrix.csv", delimiter=",")
 
 user = {}
 
@@ -14,7 +14,7 @@ tags = pd.read_csv("keywords.csv")
 movies_df = pd.read_csv("movies_all_data.csv")
 
 app = Flask(__name__)
-#CORS(app)
+CORS(app)
 
 
 @app.route('/<token>')
