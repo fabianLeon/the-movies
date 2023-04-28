@@ -37,11 +37,11 @@ for i, document in enumerate(documents):
             batch.add_data_object(
                 document, financial_keywords[0], vector=tfidf_matrix[i]
             )
-        elif keyword_weights[1] > 0.5:
+        if keyword_weights[1] > 0.5:
             batch.add_data_object(
                 document, financial_keywords[1], vector=tfidf_matrix[i]
             )
-        elif keyword_weights[2] > 0.5:
+        if keyword_weights[2] > 0.5:
             batch.add_data_object(
                 document, financial_keywords[2], vector=tfidf_matrix[i]
             )
