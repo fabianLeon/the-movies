@@ -19,8 +19,6 @@ RUN python init.py
 COPY model.py .
 RUN python model.py
 
-COPY movies_all_data.csv .
-COPY similarity_matrix.csv .
 COPY app.py .
 
 CMD ["python3", "-m", "flask", "run", "--host=0.0.0.0"]

@@ -19,10 +19,3 @@ def recomendation_system(movie):
     for movie_id in movie_list:
         print(movies_df.iloc[movie_id[0]].title)
 
-
-while True:
-    texto = input("Ingresa el nombre de su película favorita(escriba 'salir' para salir): ")
-    if texto == "salir":
-        break
-    else:
-        recomendation_system(texto)

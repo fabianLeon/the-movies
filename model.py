@@ -59,6 +59,8 @@ movies_df.reset_index(inplace=True, drop=True)
 #Combina merge (peliculas con keywords) con credits usando id
 movies_df = pd.merge(movies_df, movies_credits, on='id', how='left')
 
+movies_df.to_csv("movies_merge_metadata.csv", index=False)
+
 #reIndexar
 movies_df.reset_index(inplace=True, drop=True)
 movies_df.head()
