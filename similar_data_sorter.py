@@ -4,14 +4,14 @@ import weaviate
 
 client = weaviate.Client(url="https://moviexpredeitor-77pe0djc.weaviate.network")
 
-financial_keywords = ["cdt", "inversiones", "rentabilidad"]
+financial_keywords = ["cdt", "fic", "rentabilidad"]
 
 documents = [
     "CDT CDT CDT CDT CDT CDT CDT CDT CDT cdt cdt cdt",
     "Este es un ejemplo inversiones",
     "inversiones inversiones inversiones INverSIONES invrsion",
     "CDT inversiones Rentabilidad",
-    "este no tiene nada ",
+    "este no tiene nada fic",
     "este no tiene nada ..... o si? Cdt cjt",
     "algo inversionesl",
     "//&)/%&/&%&/&%$#%&/()",
