@@ -12,8 +12,8 @@ def generate_embeding(data):
     return result.data[0].embedding
 
 def vectoriezer(textInput):
-    #return generate_embeding(textInput)
-    vectorizer = TfidfVectorizer()
-    vector_generate = vectorizer.fit_transform([textInput]).toarray()
-    #print(vectorizer.vocabulary_)
-    return  np.pad(np.ravel(vector_generate, (0, 2000-len(vector_generate)), mode='constant') )
+    return generate_embeding(textInput)
+    # vectorizer = TfidfVectorizer()
+    # vector_generate = vectorizer.fit_transform([textInput]).toarray()
+    # #print(vectorizer.vocabulary_)
+    # return  np.pad(np.ravel(vector_generate, (0, 2000-len(vector_generate)), mode='constant') )
