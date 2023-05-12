@@ -101,6 +101,7 @@ movies_df['tags'] = movies_df['overview']+' '+movies_df['keywords']+' ' + \
     movies_df['cast']+' '+movies_df['genre']+' '+movies_df['original_title']
 movies_df['tags']
 
+movies_df.to_csv("movies_all_data_noseparete.csv", index=False)
 movies_df.drop(['genre', 'original_title', 'keywords',
                'cast', 'overview'], axis=1, inplace=True)
 
