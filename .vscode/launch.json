@@ -11,7 +11,7 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "justMyCode": true,
-            "env": { "OPENAI_API_KEY":"d97da19393d241cd9d00b5709d489481"}
+            "env": { "OPENAI_API_KEY":"d9306dc66e8245df9f7d7a08657b9bfc"}
         }
     ]
 }

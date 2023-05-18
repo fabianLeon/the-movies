@@ -46,15 +46,16 @@ tfidf_vectors = pd.DataFrame(tfidf_vectors, columns=movies_md.columns)
 )
 
 arbol = tree.ExtraTreeRegressor(max_depth=10)
-modelo = arbol.fit(datos_entrenamiento.values, objetivo_entrenamiento.values)
+modelo = arbol.fit(datos_entrenamiento, objetivo_entrenamiento)
 score_entrenamiento = arbol.score(
-    datos_entrenamiento.values, objetivo_entrenamiento.values
+    datos_entrenamiento, objetivo_entrenamiento
 )
-score_pruebas = arbol.score(datos_pruebas.values, objetivo_pruebas.values)
+score_pruebas = arbol.score(datos_pruebas, objetivo_pruebas)
 
-print(tree.export_text(modelo, feature_names=[
-      "overview",	"keywords", "cast", "genre"]))
-
+print(tree.export_text(modelo,
+                       feature_names=["overview",	"keywords", "cast", "genre"]))
+print(score_entrenamiento)
+print(score_pruebas)
 plt.figure(figsize=(12, 6))
 tree.plot_tree(modelo, feature_names=["overview",	"keywords", "cast", "genre"])
 plt.show()
